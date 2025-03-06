@@ -1,0 +1,70 @@
+﻿@model StudentManagementSystem.Models.Entities.Student
+<h1>Edit Student</h1>
+<div class="mt-5">
+    <label class="form-label">First Name</label>
+    <input type="text" class="form-control" id="txtFName" value="@Model.FirstName" required />
+</div>
+<div class="mt-5">
+    <label class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="txtLName" value="@Model.LastName" required />
+</div>
+<div class="mt-5">
+    <label class="form-label">Address</label>
+    <input type="text" class="form-control" id="txtAddress" value="@Model.Address" required />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveStudent();">Save</button>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-danger" onclick="DeleteStudent(@Model.Id)">Delete</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveStudent() {
+        var firstname = $("#txtFName").val();
+        var lastname = $("#txtLName").val();
+        var homeaddress = $("#txtAddress").val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Edit", "Students")",
+            data: {firstname: firstname, lastname: lastname, address: homeaddress },
+            dataType: "json",
+            success: function (success) {
+                if(success){
+                    alert("Student updated.");
+                    var url1="/Students/List";
+                    window.location.href=url1;
+                }
+                else{
+                    alert("Error. Please try again.")
+                }
+            },
+            error: function (req, status, error) {
+
+            }
+        })
+    }
+    function DeleteStudent(id) {
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("Delete", "Students")',
+            data: { id: id },
+            success: function (success) {
+                if(success){
+                alert("Student Deleted");
+                var url1="/Students/List";
+                window.location.href=url1;
+                }
+                else{
+                    alert("Error. Please try again.")
+                }
+            },
+            error: function (req, status, error) {
+
+            }
+        })
+    }
+
+</script>

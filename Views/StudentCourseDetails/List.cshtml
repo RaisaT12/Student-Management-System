@@ -1,0 +1,92 @@
+﻿@model List<StudentManagementSystem.Models.Entities.StudentCourseDetails>
+<h1>All Student Course Details</h1>
+<head>
+    <style>
+        body {
+            background-color: honeydew
+        }
+    </style>
+</head>
+<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#uploadModal">
+    Upload Excel
+</button>
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" id="fileInput" name="file" accept=".xlsx, .xls" required />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UploadExcel()">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-success" asp-area="" asp-controller="StudentCourseDetails" asp-action="Add">Add</a>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Student Registration Number</th>
+            <th>Student Name</th>
+            <th>Course</th>
+            <th>Grade</th>
+            <th>Teacher Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Student.Registration_Num</td>
+                <td>@item.Student.FirstName @item.Student.LastName</td>
+                <td>@item.Course.Name</td>
+                <td>@item.Grade.Name</td>
+                <td>@item.Teacher.FirstName @item.Teacher.LastName</td>
+                <td>
+                    <a class="btn btn-success" asp-controller="StudentCourseDetails" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-primary" href="/StudentCourseDetails/ExportStudentCourseToExcel">Download</a>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function UploadExcel() {
+        var formData = new FormData();
+        var fileInput = $("#fileInput")[0];
+        if (fileInput.files.length > 0) {
+            formData.append("file", fileInput.files[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UploadExcel", "StudentCourseDetails")",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert("File uploaded and data added successfully.");
+                        location.reload();
+                    } else {
+                        alert("Error uploading file. Please try again.");
+                    }
+                },
+                error: function () {
+                    alert("Error uploading file. Please try again.");
+                }
+            });
+        } else {
+            alert("Please select a file to upload.");
+        }
+    }
+</script>

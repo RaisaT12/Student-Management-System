@@ -1,0 +1,37 @@
+﻿@model List<StudentManagementSystem.Models.Entities.Attendance>
+<h1>All Attendance</h1>
+<head>
+    <style>
+        body {
+            background-color: honeydew
+        }
+    </style>
+</head>
+<a class="btn btn-success" asp-area="" asp-controller="Attendances" asp-action="Add">Add</a>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Student Registration Number</th>
+            <th>Student Name</th>
+            <th>Teacher Name</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Student.Registration_Num</td>
+                <td>@item.Student.FirstName @item.Student.LastName</td>
+                <td>@item.Teacher.FirstName @item.Teacher.LastName</td>
+                <td>@item.Date</td>
+                <td>@item.Status</td>
+                <td><a class="btn btn-success" asp-controller="Attendances" asp-action="Edit" asp-route-id="@item.Id">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<a class="btn btn-primary" href="/Attendances/ExportAttendanceToExcel">Download</a>
+

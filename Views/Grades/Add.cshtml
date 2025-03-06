@@ -1,0 +1,43 @@
+﻿<h1>Add Grade</h1>
+<div class="mt-5">
+    <label class="form-label">Name</label>
+    <input type="text" class="form-control" id="txtName" placeholder="Grade number" required/>
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateDate" placeholder="Today's date'" required/>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveGrade();">Save</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function SaveGrade() 
+    {
+        var name = $("#txtName").val();
+        var createdate = $("#txtCreateDate").val();      
+        $.ajax({
+            type:"POST",
+            url:"@Url.Action("Add","Grades")",
+            data: { name: name, date: createdate },
+            dataType:"json",
+            success: function (success) { 
+                if(success){
+                    alert("Grade Added.");
+                    var url1 = "/Grades/List";
+                    window.location.href = url1;
+                }
+                else{
+                    alert("An error occurred. Please try again.");
+                }
+            },
+            error:function(req, status, error) {
+
+            }
+
+        })
+
+    }
+</script>

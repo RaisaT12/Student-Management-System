@@ -1,0 +1,90 @@
+﻿@model List<StudentManagementSystem.Models.Entities.Student>
+<h1>All Students</h1>
+<head>
+    <style>
+        body {
+            background-color:honeydew
+        }
+    </style>
+</head>
+<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#uploadModal">
+    Upload Excel
+</button>
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm" enctype="multipart/form-data">
+          <input type="file" id="fileInput" name="file" accept=".xlsx, .xls" required />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="UploadExcel()">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="btn btn-success" asp-area="" asp-controller="Students" asp-action="Add">Add</a>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Registration Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Registration_Num</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Address</td>
+                <td>
+                    <a class="btn btn-success" asp-controller="Students" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-primary" href="/Students/ExportStudentsToExcel">Download</a>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function UploadExcel() {
+        var formData = new FormData();
+        var fileInput = $("#fileInput")[0];
+        if (fileInput.files.length > 0) {
+            formData.append("file", fileInput.files[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UploadStudentsExcel", "Students")",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert("File uploaded and data added successfully.");
+                        location.reload();
+                    } else {
+                        alert("Error uploading file. Please try again.");
+                    }
+                },
+                error: function () {
+                    alert("Error uploading file. Please try again.");
+                }
+            });
+        } else {
+            alert("Please select a file to upload.");
+        }
+    }
+</script>

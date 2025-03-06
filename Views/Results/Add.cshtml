@@ -1,0 +1,52 @@
+﻿@model StudentManagementSystem.Models.ResultViewModel
+<h1>Add Result</h1>
+<div class="mt-5">
+    <label for="Student Course Details">Student Course Details</label>
+    <select class="form-control" id="StudentCourseDetailsId" required>
+        @foreach(var studentcourse in Model.StudentCourseDetailsViewModelList)
+        {
+            <option value="@studentcourse.Value">@studentcourse.Text</option>
+        }
+    </select>
+
+</div>
+
+<div class="mt-5">
+    <label class="form-label">Marks</label>
+    <input type="text" class="form-control" id="txtMarks" required/>
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateDate" required />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveResult();">Save</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function SaveResult()
+    {
+        var studentcoursedetailsid = $("#StudentCourseDetailsId").val();
+        var marks = $("#txtMarks").val();
+        var createdate = $("#txtCreateDate").val();
+        $.ajax({
+            type:"POST",
+            url:'@Url.Action("Add","Results")',
+            data: { studentcoursedetailsid: studentcoursedetailsid, marks: marks, createdDate: createdate },
+            dataType: "json",
+            success: function (success) {
+                if (success) {
+                    alert("Result added successfully!");
+                }
+                else {
+                    alert("An error occurred. Please try again.");
+                }
+            },
+            error: function (error) {
+                alert("An error occurred. Please try again.");
+            }
+        })
+    }    
+</script>

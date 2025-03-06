@@ -1,0 +1,70 @@
+﻿@model StudentManagementSystem.Models.AttendanceViewModel;
+<h1>Add Attendance</h1>
+<div class="mt-5">
+    <label label for="Student">Student Id</label>
+    <select class="form-control" id="StudentId">
+        @foreach (var student in Model.StudentViewModelList)
+        {
+            <option value="@student.Value">@student.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label for="Teacher">Teacher Id</label>
+    <select class="form-control" id="TeacherId">
+        @foreach (var teacher in Model.TeacherViewModelList)
+        {
+            <option value="@teacher.Value">@teacher.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control" id="txtDate" required/>
+</div>
+<div  class="mt-5">
+    <label form-label>Status</label>
+    <input type="checkbox" id="checkStatus"/>
+
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateddate" required />
+</div>
+
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveAttendance();">Save</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveAttendance(){
+        var studentid = $("#StudentId").val();
+        var teacherid=$("#TeacherId").val();
+        var status = $("#checkStatus").prop('checked');
+        var date = $("#txtDate").val();
+        var createddate = $("#txtCreateddate").val();
+        $.ajax({
+            url:'@Url.Action("Add","Attendances")',
+            type:"POST",
+            data: { studentId: studentid, teacherid: teacherid, date: date, status: status, createddate: createddate },
+            dataType:"json",
+            success: function (success) {
+                    if(success)
+                    {
+                         alert("Attendance added successfully!");
+                         var url1="/Attendances/List";
+                         window.location.href=url1;
+                    }
+                    else
+                    {
+                          alert("An error occurred. Please try again.");
+                    }
+                       
+                    },
+                    error: function (error) {
+                        alert("An error occurred. Please try again.");
+                    }
+        })
+    }
+</script>

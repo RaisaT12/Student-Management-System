@@ -1,0 +1,80 @@
+﻿@model StudentManagementSystem.Models.AttendanceViewModel;
+<h1>Edit Attendance</h1>
+<div class="mt-5">
+    <label for="Student">Student</label>
+    @Html.DropDownListFor(n => n.StudentId, Model.StudentViewModelList)
+</div>
+<div class="mt-5">
+    <label for="Teacher">Teacher</label>
+    @Html.DropDownListFor(n => n.TeacherId, Model.TeacherViewModelList)
+</div>
+<div class="mt-5">
+    <label class="form-label">Date</label>
+    @if(Model.Date != null)
+    {
+           <input type="date" class="form-control" id="txtDate" value="@String.Format("{0:yyyy-MM-dd}",Model.Date)" required />
+    }
+    else
+    {
+      <input type="date" class="form-control" id="txtDate" value="@Model.Date" required />
+    }
+</div>
+<div class="mt-5">
+    <label form-label>Status</label>
+    <input type="checkbox" id="checkStatus" value="true" @(Model.Status ? "checked=\"checked\"" : "") />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveAttendance(@Model.Id);">Save</button>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-danger" onclick="DeleteAttendance(@Model.Id)">Delete</button>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveDetails() {
+
+        var studentid = $("#StudentId").val();
+        var teacherid = $("#TeacherId").val();
+        var status = $("#checkStatus").prop('checked');
+        var date = $("#txtDate").val();
+
+        $.ajax({
+            url: '@Url.Action("Edit", "Attendances")',
+            type: 'POST',
+            data: { studentId: studentid, teacherId: teacherid, date: date, status: status },
+            dataType: "json",
+            success: function (success) {
+                    if(success)
+                        {
+                         alert("Attendance updated successfully!");
+                         var url1="/Attendances/List";
+                         window.location.href=url1;
+                    }
+                    else
+                    {
+                              alert("An error occurred. Please try again.");
+                        }
+
+                        },
+                        error: function (error) {
+                            alert("An error occurred. Please try again.");
+                        }
+        });
+    };
+        function DeleteAttendance(id){
+            $.ajax({
+                type:"DELETE",
+                url:'@Url.Action("Delete", "Attendances")',
+                 data: { id: id},
+                success: function (success) {
+                    alert("Attendance deleted.");
+                    var url1="/Attendances/List";
+                    window.location.href=url1;
+
+                },
+                error: function (error) {
+                    alert("An error occurred. Please try again.");
+                }
+            })
+        }
+</script>

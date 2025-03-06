@@ -1,0 +1,88 @@
+﻿@model StudentManagementSystem.Models.Entities.Teacher
+<h1>Edit Teachers</h1>
+<div class="mt-5">
+    <label class=" form-label">First Name</label>
+    <input type="text" class="form-control" id="txtFName" value="@Model.FirstName" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Last Name</label>
+    <input type="text" class="form-control" id="txtLName" value="@Model.LastName" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Address</label>
+    <input type="text" class="form-control" id="txtAddress" value="@Model.Address" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Contact</label>
+    <input type="text" class="form-control" id="txtContact" value="@Model.Contact" required />
+</div>
+<div class="mt-5">
+    <label class="form-label">Join Date</label>
+    @if (Model.JoinDate != null)
+    {
+        <input type="date" class="form-control" id="txtJoinDate" value="@String.Format("{0:yyyy-MM-dd}",Model.JoinDate)" required />
+    }
+    else
+    {
+        <input type="date" class="form-control" id="txtJoinDate" value="@Model.JoinDate" required />
+    }
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveTeacher();">Save</button>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-danger" onclick="DeleteTeacher(@Model.Id)">Delete</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveTeacher() {
+        var firstname = $("#txtFName").val();
+        var lastname = $("#txtLName").val();
+        var address = $("#txtAddress").val();
+        var contact = $("#txtContact").val();
+        var joindate = $("#txtJoinDate").val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Edit", "Teachers")",
+            data: { firstname: firstname, lastname: lastname, address: address, contact: contact, joindate: joindate},
+            dataType: "json",
+            success: function (success) {
+                if(success){
+                alert("Teacher updated.");
+                var url1="/Teachers/List";
+                window.location.href=url1;
+                }
+                else{
+                alert("Error.Please try again.")
+                }
+
+            },
+            error: function (req, status, error) {
+
+            }
+
+        })
+    }
+    function DeleteTeacher(id) {
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("Delete", "Teachers")',
+            data: { id: id },
+            success: function (success) {
+                if(success){
+                alert("Teacher deleted");
+                var url1="/Teachers/List";
+                window.location.href=url1;
+                }
+                else{
+                alert("Error.Please try again.")
+                }
+        },
+                error: function (req, status, error) {
+
+                }
+        })
+    }
+</script>

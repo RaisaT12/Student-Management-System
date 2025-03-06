@@ -1,0 +1,48 @@
+﻿<h1>All Courses</h1>
+<div class="mt-5">
+    <label class="form-label">Name</label>
+    <input type="text" class="form-control" id="txtName" placeholder="Course Name" required/>
+</div>
+<div>
+    <label class="form-label">Description</label>
+    <input type="text" class="form-control" id="txtDesc" placeholder="Description" required/>
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateDate" placeholder="Today's date'" required />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveCourse();">Save</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveCourse()
+    {
+        var name = $("#txtName").val();
+        var description = $("#txtDesc").val();
+        var createddate = $("#txtCreateDate").val();
+        console.log(name);
+        debugger;
+        $.ajax({
+            type:"POST",
+            url:"@Url.Action("Add","Courses")",
+            data: { name: name, desc: description, date: createddate },
+            dataType:"json",
+            success: function (success) {
+                if(success){
+                alert("Course added.");
+                var url1 = "/Courses/List";
+                window.location.href = url1;
+                }
+                else{
+                    alert("Error.")
+                }
+
+            },
+            error: function (error) {
+                alert("An error occurred. Please try again.");
+            }
+        })
+    }
+</script>

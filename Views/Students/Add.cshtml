@@ -1,0 +1,60 @@
+﻿<h1>Add Student</h1>
+<div class="mt-5">
+    <label class="form-label">Registration Number</label>
+    <input type="text" class="form-control" id="txtRegNum" required/>
+</div>
+<div class="mt-5">
+    <label class="form-label">First Name</label>
+    <input type="text" class="form-control" id="txtFName" required/>
+</div>
+<div class="mt-5">
+    <label class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="txtLName" required />
+</div>
+<div class="mt-5">
+    <label class="form-label">Address</label>
+    <input type="text" class="form-control" id="txtAddress" required />
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateddate" required/>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveStudent();">Save</button>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveStudent() 
+    {
+        var regnum = $("#txtRegNum").val();
+        var firstname = $("#txtFName").val();
+        var lastname = $("#txtLName").val();
+        var homeaddress = $("#txtAddress").val();
+        var createddate=$("#txtCreateddate").val();
+        debugger;
+        console.log(regnum);
+        $.ajax({
+            type:"POST",
+            url:"@Url.Action("Add","Students")",
+            data: { regnumber: regnum, fname: firstname, lname: lastname, address: homeaddress, date:createddate },
+            dataType:"json",
+            success: function (success) {
+                if (success) {
+                    alert("Student Added.");
+                    var url1 = "/Students/List";
+                    window.location.href = url1;
+                }
+                else {
+                    alert("Error. Please try again.")
+                }
+
+            },
+            error: function (req, status, error) {
+
+            }
+        })
+    }
+
+</script>

@@ -1,0 +1,81 @@
+﻿@model StudentManagementSystem.Models.StudentCourseDetailsViewModel;
+<h1>Add Student Course Details</h1>
+<div class="mt-5">
+    <label for="Student">Student</label>
+    <select class="form-control" id="StudentId" required>
+        @foreach (var student in Model.StudentViewModelList)
+        {
+            <option value="@student.Value">@student.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label for="Course">Course</label>
+    <select class="form-control" id="CourseId" required>
+        @foreach (var course in Model.CourseViewModelList)
+        {
+            <option value="@course.Value">@course.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label for="Grade">Grade</label>
+    <select class="form-control" id="GradeId"required>
+        @foreach (var grade in Model.GradeViewModelList)
+        {
+            <option value="@grade.Value">@grade.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label for="Teacher">Teacher</label>
+    <select class="form-control" id="TeacherId" required>
+        @foreach (var teacher in Model.TeacherViewModelList)
+        {
+            <option value="@teacher.Value">@teacher.Text</option>
+        }
+    </select>
+</div>
+<div class="mt-5">
+    <label class="form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreateDate" required/>
+</div>
+<div class="mt-5">
+<button type="submit" class="btn btn-primary" onclick="SaveDetails();">Save</button>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveDetails()
+        {
+
+        var studentid=$("#StudentId").val();
+        var courseid=$("#CourseId").val();
+        var gradeid=$("#GradeId").val();
+        var teacherid=$("#TeacherId").val();
+        var createddate=$("#txtCreateDate").val();
+        console.log('hi');
+
+                $.ajax({
+                    url: '@Url.Action("Add", "StudentCourseDetails")',
+                    type: 'POST',
+                    data: {studentId:studentid, courseId:courseid, gradeId:gradeid, teacherId:teacherid, createdDate:createddate},
+                    dataType:"json",
+                    success: function (success) {
+                        if(success){
+                            alert("Course details added successfully!");
+                            var url1="/StudentCourseDetails/List";
+                            window.location.href=url1;
+                        }
+                        else{
+                            alert("An error occurred. Please try again.");
+                        }
+                       
+                    },
+                    error: function (error) {
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            };
+</script>

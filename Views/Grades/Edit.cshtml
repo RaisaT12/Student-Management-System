@@ -1,0 +1,46 @@
+﻿@model StudentManagementSystem.Models.Entities.Grade
+<h1>Edit Grade</h1>
+<div class="mt-5">
+    <label class="form-label">Name</label>
+    <input type="text" class="form-control" id="txtName" value="@Model.Name" required/>
+</div>
+<div class ="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveGrade();">Save</button>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-danger" onclick="DeleteGrade(@Model.Id)">Delete</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function SaveGrade() {
+        var name = $("#txtName").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Edit", "Grades")",
+            data: { name: name},
+            dataType: "json",
+            success: function (result) {
+                alert("Updated.");
+                var url1="/Grades/List";
+                window.location.href=url1;
+            },
+            error: function (req, status, error) {
+
+            }
+        })
+    }
+    function DeleteGrade(id){
+        $.ajax({
+            type:"DELETE",
+            url:'@Url.Action("Delete", "Grades")',
+             data: { id: id},
+            success: function(result){
+                alert("Deleted");
+                var url1="/Grades/List";
+                window.location.href=url1;
+            }
+        })
+    }
+</script>

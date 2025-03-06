@@ -1,0 +1,63 @@
+﻿<h1>Add Teacher</h1>
+<div class="mt-5">
+    <label class=" form-label">First Name</label>
+    <input type="text" class="form-control" id="txtFName" required/>
+</div>
+<div class="mt-5">
+    <label class=" form-label">Last Name</label>
+    <input type="text" class="form-control" id="txtLName" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Address</label>
+    <input type="text" class="form-control" id="txtAddress" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Contact</label>
+    <input type="text" class="form-control" id="txtContact" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Join Date</label>
+    <input type="datetime-local" class="form-control" id="txtJoinDate" required />
+</div>
+<div class="mt-5">
+    <label class=" form-label">Created Date</label>
+    <input type="datetime-local" class="form-control" id="txtCreatedDate" placeholder="Today's date'" required />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveTeacher();">Save</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveTeacher()
+    {
+        var firstname = $("#txtFName").val();
+        var lastname = $("#txtLName").val();
+        var address = $("#txtAddress").val();
+        var contact = $("#txtContact").val();
+        var joindate = $("#txtJoinDate").val();
+        var createddate = $("#txtCreatedDate").val();
+
+        $.ajax({
+            type:"POST",
+            url:"@Url.Action("Add","Teachers")",
+            data: { fname: firstname, lname: lastname, address:address, contact:contact, joindate:joindate,createddate:createddate },
+            dataType:"json",
+            success: function (success) {
+                    if(success){
+                alert("Teacher added.");
+                var url1="/Teachers/List";
+                window.location.href=url1;
+                }
+                    else{
+                alert("Error.Please try again.")
+                }
+
+            },
+            error: function (req, status, error) {
+
+            }
+
+        })
+    }
+</script>

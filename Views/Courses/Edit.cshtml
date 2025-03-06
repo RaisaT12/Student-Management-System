@@ -1,0 +1,67 @@
+﻿@model StudentManagementSystem.Models.Entities.Course
+
+<h1>Edit Course</h1>
+<div class="mt-5">
+    <label class="form-label">Name</label>
+    <input type="text" class="form-control" id="txtName" value="@Model.Name" required />
+</div>
+<div>
+    <label class="form-label">Description</label>
+    <input type="text" class="form-control" value="@Model.Description" id="txtDesc" required />
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-primary" onclick="SaveCourse();">Save</button>
+</div>
+<div class="mt-5">
+    <button type="submit" class="btn btn-danger" onclick="DeleteCourse(@Model.Id)">Delete</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    function SaveCourse() {
+        var name = $("#txtName").val();
+        var description = $("#txtDesc").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Edit", "Courses")",
+            data: { name: name, description: description },
+            dataType: "json",
+            success: function (success) {
+                if(success){
+                alert("Course updated.");
+                var url1="/Courses/List";
+                window.location.href=url1;
+                }
+                else{
+                    alert("Error.")
+                }
+                
+            },
+            error: function (error) {
+                alert("An error occurred. Please try again.");
+            }
+        })
+    }
+    function DeleteCourse(id) {
+        
+        $.ajax({
+            type: "Delete",
+            url: "@Url.Action("Delete", "Courses")",
+            data: { id: id },
+            success: function (success) {
+                if(success){
+                alert("Course deleted.");
+                var url1="/=Courses/List";
+                window.location.href=url1;
+                }
+                else{
+                    alert("Error.")
+                }
+                
+            },
+            error: function (error) {
+                alert("An error occurred. Please try again.");
+            }
+        })
+    }
+</script>
